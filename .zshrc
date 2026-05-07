@@ -111,7 +111,7 @@ git() {
     local exit_code=$?
 
     # 条件 1. 执行失败 2. 是 clone 命令 3. 包含了默认的 github.com 域名
-    if [[ $exit_code -ne 0 && "$1" == "clone" && "$*" == *"git@github.com"* ]]; then
+    if [[ $exit_code -ne 0 && "$1" == "clone" && "$*" == *"@github.com"* ]]; then
         # 输出硬编码的提示信息
         echo -e "\n======================================================="
         echo -e "💡 提示 (来自 .zshrc):"
