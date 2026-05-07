@@ -10,17 +10,20 @@
 
 ```bash
 cd ~/Documents
-git clone git@github.com:Klee1453/dotfiles.git
+git clone ...
 ```
 
 ## zsh
 
-以 `.zshrc` 为例，在 home 目录下创建符号链接并验证：
+为了避免第三方程序安装脚本（例如 fnm、nvm、cargo 等）在修改环境变量时无法写入或破坏符号链接，不使用符号链接直接链接 `.zshrc`。
+
+使用 `source` 引入配置。在默认的 `~/.zshrc` 的头部添加以下内容：
 
 ```bash
-ln -s ~/Documents/dotfiles/.zshrc ~/.zshrc
-ls -l ~/.zshrc
+source ~/Documents/dotfiles/.zshrc # 具体路径根据实际情况修改
 ```
+
+这样后续其他工具自动写入的环境变量也会安全地写入 `~/.zshrc` 底部，同时也不会污染受 Git 管理的 `dotfiles/.zshrc`。
 
 在终端中激活配置：
 

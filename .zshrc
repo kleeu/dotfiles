@@ -128,3 +128,18 @@ git() {
     # 传递原始退出码
     return $exit_code
 }
+
+## 9.2 npm install, 禁止全局使用 npm install，提示使用 pnpm
+npm() {
+
+  if [[ "$1" == "install" || "$1" == "i" ]]; then
+    echo -e "\n======================================================="
+    echo -e "💡 提示 (来自 .zshrc):"
+    echo "请使用 pnpm install 而非 npm install 来安装依赖。"
+    echo -e "=======================================================\n"
+    return 1
+  else
+    # 放行其他 npm 命令，例如 npm run, npm publish 等
+    command npm "$@"
+  fi
+}
