@@ -31,22 +31,31 @@ source ~/Documents/dotfiles/.zshrc # 具体路径根据实际情况修改
 source ~/.zshrc
 ```
 
-在 finder 中需要使用 ⌘ + ⇧ + . 来显示隐藏文件。
+在 Finder 中需要使用 Command + Shift + . 来显示隐藏文件。
 
 ## PowerShell
 
-Powershell 的配置文件有比起通过 git 管理更优雅的方式：通过 OneDrive 同步。
+PowerShell 配置也采用相同的管理方式：真正受 Git 管理的是仓库中的 `Microsoft.PowerShell_profile.ps1`，本机的 `$PROFILE` 只负责加载它。这样 PowerShell 仍然可以在本机 profile 中保留机器专属设置，而通用配置只维护一份。
 
-通过 `echo $PROFILE` 获取 PowerShell 配置文件路径。
-
-在 OneDrive 创建同名文件。此处以 `WindowsPowerShell\Microsoft.PowerShell_profile.ps1` 为例。
-
-在配置文件中添加以下内容，并替换路径中的 `username` 为实际用户名：
+在 Powershell 中，使用 `$PROFILE` 确认配置文件路径，然后编辑此配置文件，在文件头部添加：
 
 ```powershell
-. "$env:C:\Users\username\OneDrive\WindowsPowerShell\Microsoft.PowerShell_profile.ps1"
+$dotfilesProfile = "$HOME\Documents\dotfiles\Microsoft.PowerShell_profile.ps1"  # 具体路径根据实际情况修改
+
+if (Test-Path $dotfilesProfile) {
+    . $dotfilesProfile
+}
 ```
 
-这样就能够使用 OneDrive 自动同步 PowerShell 配置文件了。
+在终端中激活配置：
 
-由于采用 OneDrive 进行同步，本仓库中的 `Microsoft.PowerShell_profile.ps1` 为手动备份的配置文件。
+```powershell
+. $PROFILE
+```
+
+可能会提示由于权限限制无法加载配置，需要修改当前用户的执行策略，并且移除本脚本的来源标记：
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+Unblock-File -LiteralPath "$HOME\Documents\dotfiles\Microsoft.PowerShell_profile.ps1"  # 具体路径根据实际情况修改
+``
